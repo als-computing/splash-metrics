@@ -1,0 +1,29 @@
+version: "2.2"
+services:
+  web:
+    image: nginx
+    ports:
+    - 8080:8080
+    #- 443:443
+    volumes:
+      - ./web/nginx.conf:/etc/nginx/nginx.conf
+
+  grafana:
+    image: grafana/grafana
+    hostname: grafana
+    expose:
+      - 3000
+    restart: always
+    user: "$UID:$GID"
+    volumes:
+      - ./grafana.ini:/etc/grafana/grafana.ini
+      - ${GRAFANA_LOC}:/var/lib/grafana
+
+  prometheus:
+    image: prom/prometheus 
+    user: "$UID:$GID"
+    volumes:
+      - ${PROMETHEUS_LOC}:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    expose:
+      - 9090
