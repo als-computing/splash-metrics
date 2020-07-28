@@ -3,7 +3,7 @@ services:
   web:
     image: nginx
     ports:
-    - 8080:8080
+    - 80:80
     #- 443:443
     volumes:
       - ./web/nginx.conf:/etc/nginx/nginx.conf
@@ -13,17 +13,21 @@ services:
     hostname: grafana
     expose:
       - 3000
+    environment: 
+      GF_SECURITY_ADMIN_USER: ${ADMIN_NAME}
+      GF_SECURITY_ADMIN_PASSWORD: ${ADMIN_PASSWORD}
     restart: always
-    user: "$UID:$GID"
     volumes:
       - ./grafana.ini:/etc/grafana/grafana.ini
-      - ${GRAFANA_LOC}:/var/lib/grafana
+      - grafana-storage:/var/lib/grafana
 
   prometheus:
     image: prom/prometheus 
-    user: "$UID:$GID"
     volumes:
-      - ${PROMETHEUS_LOC}:/prometheus
+      - prometheus-storage:/prometheus
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     expose:
       - 9090
+volumes: 
+  prometheus-storage:
+  grafana-storage:
