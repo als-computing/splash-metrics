@@ -22,6 +22,7 @@ services:
       - grafana-storage:/var/lib/grafana
 
   prometheus:
+    hostname: prometheus
     image: prom/prometheus 
     volumes:
       - prometheus-storage:/prometheus
