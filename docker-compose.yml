@@ -1,6 +1,7 @@
 version: "2.2"
 services:
   web:
+    restart: unless-stopped
     image: nginx
     ports:
     - 80:80
@@ -16,7 +17,7 @@ services:
     environment: 
       GF_SECURITY_ADMIN_USER: ${ADMIN_NAME}
       GF_SECURITY_ADMIN_PASSWORD: ${ADMIN_PASSWORD}
-    restart: always
+    restart: unless-stopped
     volumes:
       - ./grafana.ini:/etc/grafana/grafana.ini
       - grafana-storage:/var/lib/grafana
@@ -24,6 +25,7 @@ services:
   prometheus:
     hostname: prometheus
     image: prom/prometheus 
+    restart: unless-stopped
     volumes:
       - prometheus-storage:/prometheus
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
